@@ -1,0 +1,434 @@
+#!/bin/bash
+
+########## Color messages #######################
+
+ESC=$(echo -e -n '\e')
+
+Z='\e[0m'     # Clear
+
+R='\e[1;31m'  # Red
+G='\e[1;32m'  # Green
+Y='\e[1;33m'  # Yellow
+B='\e[1;34m'  # Blue
+P='\e[1;35m'  # Purple
+C='\e[1;36m'  # Cyan
+W='\e[1;37m'  # White
+
+print() {
+  if [ $# -gt 1 ]
+  then
+    echo -n -e "$1"
+    shift
+    echo -n -e "$@"$Z 2>&1
+  elif [ $# -gt 0 ]
+  then
+    echo -n -e "$@"
+  else
+    echo
+  fi
+}
+
+println() {
+  print "$@"
+  print
+}
+
+clear() {
+  print "\033[2K\r"
+}
+
+reset() {
+  print "$Z"
+}
+
+bad() {
+  println "$R" "$@" | tee -a "$LOG"
+}
+
+good() {
+  println "$G" "$@" | tee -a "$LOG"
+}
+
+trace() {
+  println "$B" "$@" | tee -a "$LOG"
+}
+
+message() {
+  println "$Y" "$@" | tee -a "$LOG"
+}
+
+_root() {
+  print "$C" "$@"
+}
+
+root() {
+  _root "$@"
+  print
+}
+
+_user() {
+  print "$W" "$@"
+}
+
+user() {
+  _user "$@"
+  print
+}
+
+########## Logging ##############################
+
+inc() {
+  trace "-> ${FUNCNAME[1]} $@"
+}
+
+dec() {
+  trace "<- ${FUNCNAME[1]} $@"
+}
+
+value() {
+  println "$C" "$1 $W$2" | tee -a "$LOG"
+}
+
+#################################################
+########## Command library ######################
+
+########## Variables ############################
+
+# ask prompt var_name default_value
+
+ask() {
+  read -e -i "$3" -p "$1" "$2"
+}
+
+ask_restart() {
+  message "Restart now?"
+  select RESTART in "Yes" "No"
+  do
+    case $RESTART in
+      Yes ) sudo reboot ;;
+      No  ) bad "Restart later to apply changes"; exit ;;
+    esac
+  done
+}
+
+# https://stackoverflow.com/questions/833227/whats-the-easiest-way-to-get-a-users-full-name-on-a-linux-posix-system
+
+set_fullname() {
+  _user_record="$(getent passwd $USER)"
+  _user_gecos_field="$(echo $_user_record | cut -d ':' -f 5)"
+  FULL_NAME="$(echo "$_user_gecos_field" | cut -d ',' -f 1)"
+}
+
+########## Directories ################################
+
+mk_home_dir() {
+  inc "$@"
+
+  local NAME="$1"
+  local DIR_NAME="$2"_HOME
+  local DEFAULT="$3"
+  local OWNER="$USER"
+
+  if [ $# -ge 4 ]
+  then
+    local OWNER="$4"
+  fi
+
+
+  message "Creating home directory for $NAME"
+
+  ask "$NAME home: " "$DIR_NAME" "$DEFAULT"
+
+  DIR="${!DIR_NAME}"
+
+  sudo : "Create directory $DIR" \
+         mkdir -p "$DIR"
+
+  sudo : "Give ownership to the user $OWNER" \
+         chown "$OWNER":"$OWNER" "$DIR"
+
+  good "$NAME home created"
+
+  dec "$@"
+}
+
+########## Files ################################
+
+unescape() {
+  command echo $1 | sed -e "s/\~/$USER/g"
+}
+
+backup() {
+  local DST="$1"
+  local SRC="$(unescape $DST)"
+  if [ ! -f "$SRC" ]
+  then
+    good "Backup: no file $SRC"
+  elif [ -f ".timestamps/$TASK/backup/$DST" ]
+  then
+    bad "Backup already exists: $DST"
+  else
+    mkdir --parents $(dirname ".timestamps/$TASK/backup/$DST")
+    command sudo cp "$SRC" ".timestamps/$TASK/backup/$DST"
+    good "Backup: $DST"
+  fi
+}
+
+create() {
+  if [ "$1" = '-a' ]
+  then
+    local MODE="append to"
+    local APPEND='-a'
+    shift
+  else
+    local MODE="create"
+  fi
+
+  if [ "$1" = "sudo" ]
+  then
+    local CMD="sudo"
+    shift
+  else
+    local CMD=""
+  fi
+
+  if [ "$1" = ":" ]
+  then
+    shift
+    local MESSAGE="$1"
+    message "$MESSAGE"
+    shift
+  fi
+
+  local NAME="$1"
+
+  backup "$NAME"
+
+  if [ "$CMD" = "sudo" ]
+  then
+    root "$MODE $NAME" | tee -a "$LOG"
+  else
+    user "$MODE $NAME" | tee -a "$LOG"
+  fi
+
+  command $CMD tee $APPEND "$NAME"
+  print
+}
+
+append() {
+  create '-a' "$@"
+}
+
+########## Aptitude commands ####################
+
+install() {
+  if [ _$TASK = _ ]
+  then
+    local TAG="$1"
+  else
+    local TAG="$TASK"
+  fi
+
+  message "Checking apt database last update time..."
+  if [ $(command sudo find /var/lib/apt/lists -type d -name partial -daystart -mtime 0 -print) ]
+  then
+    good "List of packages is up to date"
+  else
+    update
+  fi
+
+  sudo : "Install packages" \
+         aptitude install -P --add-user-tag "$TAG" "$@"
+
+  if [ $? -eq 0 ]
+  then
+    good "Packages installed"
+  else
+    bad "Installation error"
+  fi
+}
+
+update() {
+  sudo : "Updating list of packages..." \
+         aptitude update
+
+  if [ $? -eq 0 ]
+  then
+    good "apt database updated."
+  else
+    bad "apt database update failed"
+  fi
+}
+
+########## Raw Bash commands ####################
+
+cmd() {
+  if [ "$1" = sudo ]
+  then
+    local SUDO="sudo"
+    shift
+  else
+    local SUDO=""
+  fi
+
+  if [ "$1" = ":" ]
+  then
+    shift
+    local MESSAGE="$1"
+    message "$MESSAGE"
+    shift
+  else
+    local MESSAGE=""
+  fi
+
+  local INPUT="$*"
+  local CMD="$*"
+  if [ "$SUDO" = "sudo" ]
+  then
+    _root "sudo $CMD"
+  else
+    _user "$CMD"
+  fi
+
+  if [ "$PROMPT" = "true" ]
+  then
+    while :
+    do
+        read -s -n 1 ANSWER1
+        read -s -n 1 -t 0.1 ANSWER2
+        case "$ANSWER1$ANSWER2" in
+        "" ) break ;;
+        y  ) break ;;
+        "$ESC" ) local CMD="" ; break ;;
+        n  ) local CMD="" ; break ;;
+        e  ) 
+            clear
+            if [ "$SUDO" = "sudo" ]
+            then
+                _root "sudo "
+            else
+                _user
+            fi
+            read -e -i "$*" READ_CMD
+            reset
+            local CMD="$READ_CMD"
+            break ;;
+        esac
+    done
+    print
+  fi
+
+  if [ "_$CMD" != _ ]
+  then
+    if [ "$SUDO" = "sudo" ]
+    then
+      root "sudo $CMD" >> "$LOG"
+      command sudo -s eval "$CMD" 2>&1 | tee -a "$LOG"
+    else
+      user "$CMD" >> "$LOG"
+      eval "$CMD" 2>&1 | tee -a "$LOG"
+    fi
+    print | tee -a "$LOG"
+  else
+    trace "# $SUDO $INPUT" >> "$LOG"
+  fi
+}
+
+sudo() {
+  if [ "$1" = "append" ] || [ "$1" = "create" ]
+  then
+    local CMD="$1"
+    shift
+    "$CMD" "sudo" "$@"
+  else
+    cmd "sudo" "$@"
+  fi
+}
+
+########## Task processing ######################
+
+depends() {
+  inc "$@"
+
+  if [ ! -e ".timestamps/$1/done" ]
+  then
+    task "$@"
+  fi
+
+  dec "$@"
+}
+
+task() {
+  local OLDTASK="$TASK"
+  local OLDLOG="$LOG"
+  TASK=$(echo "$1" | sed -e 's/\/$//')
+  LOG=".timestamps/$TASK/log"
+  shift
+
+  if [ ! -f "$TASK"/task ]
+  then
+    bad "No task '$TASK'"
+    exit 1
+  fi
+
+  mkdir -p ".timestamps/$TASK"
+
+  inc "$TASK" "$@"
+  message "$(date)"
+  print
+
+#  commit "pending changes"
+
+  . "$TASK"/task
+
+#  commit "task changes"
+
+  date >> ".timestamps/$TASK/done"
+
+  dec "$TASK" "$@"
+
+  TASK="$OLDTASK"
+  LOG="$OLDLOG"
+}
+
+########## Process command line #################
+
+tasks() {
+  message "Available tasks:"
+  ls -d */
+}
+
+LOG=/dev/null
+if [ $# -eq 0 ]
+then
+  message "Usage: ob {task} [parameters]"
+  message
+  message "Legend:"
+  message
+  trace "-> task start"
+  message "This is a message."
+  message
+  user "user command"
+  bad "fail"
+  message
+  root "root command"
+  good "success"
+  message
+  trace "<- task end"
+  message
+  tasks
+else
+  if [ "$1" == '-q' ]
+  then
+    PROMPT=false
+    shift
+  else
+    PROMPT=true
+  fi
+  if [ ! -d "$1" ]
+  then
+    tasks
+  else
+    task "$@"
+  fi
+fi
