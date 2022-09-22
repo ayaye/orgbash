@@ -101,6 +101,8 @@ ask() {
 }
 
 ask_restart() {
+  date >> ".timestamps/$TASK/done"
+
   sudo : "Restart now?" \
          reboot
 }
@@ -371,11 +373,7 @@ task() {
   message "$(date)"
   print
 
-#  commit "pending changes"
-
   . "$TASK"/task
-
-#  commit "task changes"
 
   date >> ".timestamps/$TASK/done"
 
