@@ -317,10 +317,10 @@ cmd() {
     if [ "$SUDO" = "sudo" ]
     then
       root "sudo $CMD" >> "$LOG"
-      command sudo -s eval "$CMD" 2>&1 | tee -a "$LOG"
+      command sudo -s eval "$CMD" |& tee -a "$LOG"
     else
       user "$CMD" >> "$LOG"
-      eval "$CMD" 2>&1 | tee -a "$LOG"
+      eval "$CMD" |& tee -a "$LOG"
     fi
     print | tee -a "$LOG"
   else
