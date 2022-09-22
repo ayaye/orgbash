@@ -1,24 +1,34 @@
-append : "Execute .profile from interactive login shell (.bash_profile)" \
+create : "Execute .bash_login and .bashrc from interactive login shell (.bash_profile)" \
          ~/.bash_profile << EOF
-
 # debby $TASK start
-if [ -f ~/.profile ]
+if [ -f ~/.bash_login ]
 then
-  . ~/.profile
+  . ~/.bash_login ]
+fi
+
+if [ -f ~/.bashrc ]
+then
+  . ~/.bashrc
 fi
 # debby $TASK end
 EOF
 
-append : "Execute .bash_profile from xterm (x.initrc)" \
-         ~/.xsessionrc << EOF
 
+create : "Define one-time login actions (.bash_login)" \
+         ~/.bash_login << EOF
 # debby $TASK start
-if [ -f ~/.bash_profile ]
-then
-  . ~/.bash_profile
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
 fi
 # debby $TASK end
 EOF
+
 
 append : "Define bash aliases:" \
          ~/.bash_aliases << EOF
