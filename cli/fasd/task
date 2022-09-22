@@ -1,0 +1,20 @@
+install fasd
+
+
+append : "init fasd:" \
+     ~/.bashrc << EOF
+
+# debby $TASK start
+eval "\$(fasd --init auto)"
+# debby $TASK end
+EOF
+
+
+append : "Define fasd aliases:" \
+      ~/.bash_aliases << EOF
+
+# debby $TASK start
+alias v='f -e vi'
+# debby $TASK end
+EOF
+

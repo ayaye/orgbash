@@ -1,0 +1,7 @@
+install command-not-found
+
+sudo : "Update apt-file database. It is used to do a search of which package provides a file" \
+       apt-file update
+
+sudo : "Update the command-not-found cache. command-not-found looks up programs not currently installed but available from the repositories" \
+       update-command-not-found

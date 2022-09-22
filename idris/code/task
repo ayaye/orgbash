@@ -1,0 +1,5 @@
+depends idris/lsp
+depends code
+
+cmd : "Install Idris Language Server extension" \
+      code --install-extension meraymond.idris-vscode

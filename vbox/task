@@ -1,0 +1,13 @@
+depends build-essential
+
+if [ ! -f /media/cdrom/VBoxLinuxAdditions.run ]
+then
+  echo $R "Mount VBoxGuestAdditions CD first. It is automounted if LXDE is installed."
+  exit
+fi
+install module-assistant
+sudo m-a prepare
+sudo sh /media/cdrom/VBoxLinuxAdditions.run
+sudo adduser $USER vboxsf
+
+ask_restart

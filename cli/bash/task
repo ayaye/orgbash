@@ -1,0 +1,39 @@
+append : "Execute .profile from interactive login shell (.bash_profile)" \
+         ~/.bash_profile << EOF
+
+# debby $TASK start
+if [ -f ~/.profile ]
+then
+  . ~/.profile
+fi
+# debby $TASK end
+EOF
+
+append : "Execute .bash_profile from xterm (x.initrc)" \
+         ~/.xsessionrc << EOF
+
+# debby $TASK start
+if [ -f ~/.bash_profile ]
+then
+  . ~/.bash_profile
+fi
+# debby $TASK end
+EOF
+
+append : "Define bash aliases:" \
+         ~/.bash_aliases << EOF
+
+# debby $TASK start
+dc() { cd "\$@"; ls -la; }
+dpush() { pushd "\$@"; ls -la; }
+alias pushd=dpush
+alias popd="popd; ls -la"
+alias cd=dc
+alias g='grep -r -I -n --color'
+alias f='find . -name'
+# debby $TASK end
+EOF
+
+
+cmd : "Create local bin directory" \
+      mkdir -p ~/.local/bin

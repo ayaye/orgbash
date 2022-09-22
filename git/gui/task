@@ -1,0 +1,3 @@
+depends git
+
+install git-gui
