@@ -101,14 +101,8 @@ ask() {
 }
 
 ask_restart() {
-  message "Restart now?"
-  select RESTART in "Yes" "No"
-  do
-    case $RESTART in
-      Yes ) sudo reboot ;;
-      No  ) bad "Restart later to apply changes"; exit ;;
-    esac
-  done
+  sudo : "Restart now?" \
+         reboot
 }
 
 # https://stackoverflow.com/questions/833227/whats-the-easiest-way-to-get-a-users-full-name-on-a-linux-posix-system
