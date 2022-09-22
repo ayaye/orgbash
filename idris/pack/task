@@ -5,14 +5,26 @@ depends scheme
 
 install libgmp3-dev
 
+
 cmd : "Install Pack - Idris package manager" \
-      "$(curl -fsSL https://raw.githubusercontent.com/stefan-hoeck/idris2-pack/main/install.bash)"
+      bash -c '$(curl -fsSL https://raw.githubusercontent.com/stefan-hoeck/idris2-pack/main/install.bash)'
+
 
 append : "Add Idris Pack binaries to PATH" \
-         ~/.profile << EOF
+         ~/.bash_login << EOF
 
-# debby idris/pack start
+# debby $TASK start
 PATH="\$HOME/.pack/bin:\$PATH"
-eval "\$(pack completion-script pack)"
-# debby idris/pack end
+# debby $TASK end
 EOF
+
+
+append : "Init Idris Pack autocompletion" \
+         ~/.bashrc << EOF
+
+# debby $TASK start
+eval "\$(pack completion-script pack)"
+# debby $TASK end
+EOF
+
+
