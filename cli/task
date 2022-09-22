@@ -1,0 +1,8 @@
+depends cli/bash
+depends cli/command-not-found
+depends cli/completion
+depends cli/fasd
+depends cli/man
+depends cli/network
+depends cli/rlwrap
+depends cli/zip
