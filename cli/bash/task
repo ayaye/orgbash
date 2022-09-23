@@ -1,3 +1,5 @@
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+
 create : "Execute .bash_login and .bashrc from interactive login shell (.bash_profile)" \
          ~/.bash_profile << EOF
 # debby $TASK start
