@@ -5,7 +5,7 @@ append : "add 'ci \"file...\" command' to ~/.bashrc" \
 ci() {
   CIFILES="\$1"
   shift
-  while inotifywait $CIFILES
+  while inotifywait \$CIFILES
   do
     "\$@"
   done
