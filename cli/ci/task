@@ -1,0 +1,14 @@
+append : "add 'ci \"file...\" command' to ~/.bashrc" \
+         ~/.bashrc << EOF
+
+# $TOOL $TASK start
+ci() {
+  CIFILES="\$1"
+  shift
+  while inotifywait $CIFILES
+  do
+    "\$@"
+  done
+}
+# $TOOL $TASK end
+EOF
