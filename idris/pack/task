@@ -13,18 +13,18 @@ cmd : "Install Pack - Idris package manager" \
 append : "Add Idris Pack binaries to PATH" \
          ~/.bash_login << EOF
 
-# debby $TASK start
+# $TOOL $TASK start
 PATH="\$HOME/.pack/bin:\$PATH"
-# debby $TASK end
+# $TOOL $TASK end
 EOF
 
 
 append : "Init Idris Pack autocompletion" \
          ~/.bashrc << EOF
 
-# debby $TASK start
+# $TOOL $TASK start
 eval "\$(pack completion-script pack)"
-# debby $TASK end
+# $TOOL $TASK end
 EOF
 
 

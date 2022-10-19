@@ -319,10 +319,10 @@ cmd() {
     if [ "$SUDO" = "sudo" ]
     then
       root "sudo $CMD" >> "$LOG"
-      command sudo -s eval "$CMD" |& tee -a "$LOG"
+      command sudo -s eval "$CMD" # |& tee -a "$LOG"
     else
       user "$CMD" >> "$LOG"
-      eval "$CMD" |& tee -a "$LOG"
+      eval "$CMD" # |& tee -a "$LOG"
     fi
     print | tee -a "$LOG"
   else
@@ -392,6 +392,7 @@ tasks() {
   ls -d */
 }
 
+TOOL=orgbash
 LOG=/dev/null
 if [ $# -eq 0 ]
 then

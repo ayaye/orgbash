@@ -1,4 +1,9 @@
 depends idris/pack
 
 cmd : "Install Idris Language Server" \
-      pack install lsp
+      pack install-app lsp
+
+append : "Turn on rlwrap usage" \
+         ~/.pack/user/pack.toml <<EOF
+repl.rlwrap=true
+EOF

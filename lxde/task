@@ -2,12 +2,12 @@ install lxde
 
 create : "LXTerminal is non-login shell, .xsessionrc does login initialization" \
          ~/.xsessionrc <<EOF
-# debby lxde start
+# $TOOL $TASK start
 if [ -f ~/.bash_login ]
 then
   . ~/.bash_login
 fi
-# debby lxde end
+# $TOOL $TASK end
 EOF
 
 ask_restart

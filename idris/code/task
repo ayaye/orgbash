@@ -1,5 +1,7 @@
 depends idris/lsp
 depends code
 
+# meraymond.idris-vscode doesn't show errors
+
 cmd : "Install Idris Language Server extension" \
-      code --install-extension meraymond.idris-vscode
+      code --install-extension bamboo.idris2-lsp

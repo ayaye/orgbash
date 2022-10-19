@@ -14,11 +14,11 @@ git config --global alias.spull 'pull --recurse-submodules'
 
 append ~/.bash_aliases << 'EOF'
 
-# debby git start
+# $TOOL $TASK start
 alias gstat='git status'
 alias gpull='git spull'
 alias gdiff='git diff'
 alias glog='git log'
-# debby git end
+# $TOOL $TASK end
 EOF
 

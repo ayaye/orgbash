@@ -2,7 +2,7 @@
 
 create : "Execute .bash_login and .bashrc from interactive login shell (.bash_profile)" \
          ~/.bash_profile << EOF
-# debby $TASK start
+# $TOOL $TASK start
 if [ -f ~/.bash_login ]
 then
   . ~/.bash_login ]
@@ -12,13 +12,13 @@ if [ -f ~/.bashrc ]
 then
   . ~/.bashrc
 fi
-# debby $TASK end
+# $TOOL $TASK end
 EOF
 
 
 create : "Define one-time login actions (.bash_login)" \
          ~/.bash_login << EOF
-# debby $TASK start
+# $TOOL $TASK start
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -28,14 +28,14 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-# debby $TASK end
+# $TOOL $TASK end
 EOF
 
 
 append : "Define bash aliases:" \
          ~/.bash_aliases << EOF
 
-# debby $TASK start
+# $TOOL $TASK start
 dc() { cd "\$@"; ls -la; }
 dpush() { pushd "\$@"; ls -la; }
 alias pushd=dpush
@@ -43,7 +43,7 @@ alias popd="popd; ls -la"
 alias cd=dc
 alias g='grep -r -I -n --color'
 alias f='find . -name'
-# debby $TASK end
+# $TOOL $TASK end
 EOF
 
 
