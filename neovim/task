@@ -1,0 +1,6 @@
+install neovim
+
+sudo : "Set default editor" \
+       update-alternatives --config editor
+
+select-editor
