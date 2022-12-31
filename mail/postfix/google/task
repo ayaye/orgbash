@@ -1,0 +1,25 @@
+depends postfix
+
+message "https://serverfault.com/questions/119278/configure-postfix-to-send-relay-emails-gmail-smtp-gmail-com-via-port-587/119296#119296"
+
+ask "Google account username" GOOGLE_USER "$USER"
+ask "Google account password" GOOGLE_PASSWORD
+
+sudo append : "Modify postfix config" \
+     /etc/postfix/main.cf << EOF
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options =
+smtp_tls_security_level = may
+EOF
+
+sudo append : "Save Google account credentials" \
+     /etc/postfix/sasl_passwd << EOF
+smtp.gmail.com:587  "$GOOGLE_USER@gmail.com:$GOOGLE_PASSWORD"
+
+sudo : "Set secure permissions for file with credentials" \
+       chown root:root /etc/postfix/sasl_passwd && chmod 0600 /etc/postfix/sasl_passwd
+
+sudo : "Restart postfix service" \
+       service postfix restart
+

@@ -1,0 +1,5 @@
+depends mail/postfix
+
+install dovecot-imapd
+
+message 'https://www.linuxbabe.com/mail-server/install-dovecot-imap-server-debian'
