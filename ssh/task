@@ -1,0 +1,28 @@
+# https://wiki.centos.org/HowTos/Network/SecuringSSH
+
+install ssh
+
+SSHD_CONFIG=/etc/ssh/sshd_config
+
+ask "ssh server port: " SSHD_PORT 22
+
+sudo "sed -i -e 's/^Port.*$/# \0/g' '$SSHD_CONFIG'"
+sudo "sed -i -e 's/^Protocol.*$/# \0/g' '$SSHD_CONFIG'"
+sudo "sed -i -e 's/^PermitRootLogin.*/# \0/g' '$SSHD_CONFIG'"
+sudo "sed -i -e 's/^PubkeyAuthentication.*/# \0/g' '$SSHD_CONFIG'"
+sudo "sed -i -e 's/^PasswordAuthentication.*/# \0/g' '$SSHD_CONFIG'"
+
+sudo append : "modify sshd configuration" \
+              "$SSHD_CONFIG" << EOF
+Port $SSHD_PORT
+Protocol 2
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+EOF
+
+message "Don't logout!" 
+echo
+root "> sudo systemctl restart ssh"
+echo
+message "Check connection and fix it before logout!"
