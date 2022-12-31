@@ -12,7 +12,7 @@ git config --global pull.rebase true
 git config --global rebase.autoStash true
 git config --global alias.spull 'pull --recurse-submodules'
 
-append ~/.bash_aliases << 'EOF'
+append ~/.bash_aliases << EOF
 
 # $TOOL $TASK start
 alias gstat='git status'
