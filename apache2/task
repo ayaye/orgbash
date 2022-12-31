@@ -1,0 +1,5 @@
+install apache2 certbot python3-certbot-apache goaccess
+
+sudo certbot --apache
+
+# https://serverfault.com/questions/1052433/how-to-get-dovecot-to-reload-an-ssl-certificate-with-minimal-impact
