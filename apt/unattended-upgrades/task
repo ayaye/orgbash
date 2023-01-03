@@ -1,0 +1,8 @@
+message https://wiki.debian.org/UnattendedUpgrades
+
+install apt-listchanges unattended-upgrades
+
+sudo : "activate unattended-upgrades" \
+       dpkg-reconfigure -plow unattended-upgrades
+
+sudo dpkg-reconfigure apt-listchanges
