@@ -1,0 +1,8 @@
+depends mail/postfix
+
+install logwatch
+
+sudo append : "Create user configuration" \
+     /etc/logwatch/conf/logwatch.conf << EOF
+Detail = High
+EOF
