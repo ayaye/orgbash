@@ -151,7 +151,7 @@ mk_home_dir() {
 ########## Files ################################
 
 unescape() {
-  command echo $1 | sed -e "s/\~/$USER/g"
+  command echo "$1" | sed -e "s/\~/$USER/g"
 }
 
 backup() {
@@ -218,7 +218,7 @@ append() {
 ########## Aptitude commands ####################
 
 install() {
-  if [ _$TASK = _ ]
+  if [ _"$TASK" = _ ]
   then
     local TAG="$1"
   else
@@ -389,7 +389,7 @@ task() {
 
 tasks() {
   message "Available tasks:"
-  ls -d */
+  ls -d -- */
 }
 
 TOOL=orgbash

@@ -3,14 +3,14 @@
 create : "Execute .bash_login and .bashrc from interactive login shell (.bash_profile)" \
          ~/.bash_profile << EOF
 # $TOOL $TASK start
-if [ -f ~/.bash_login ]
+if [ -f \$HOME/.bash_login ]
 then
-  . ~/.bash_login ]
+  . \$HOME/.bash_login ]
 fi
 
-if [ -f ~/.bashrc ]
+if [ -f \$HOME/.bashrc ]
 then
-  . ~/.bashrc
+  . \$HOME/.bashrc
 fi
 # $TOOL $TASK end
 EOF
@@ -20,13 +20,13 @@ create : "Define one-time login actions (.bash_login)" \
          ~/.bash_login << EOF
 # $TOOL $TASK start
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [ -d "\$HOME/bin" ] ; then
+    PATH="\$HOME/bin:\$PATH"
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
+if [ -d "\$HOME/.local/bin" ] ; then
+    PATH="\$HOME/.local/bin:\$PATH"
 fi
 # $TOOL $TASK end
 EOF
