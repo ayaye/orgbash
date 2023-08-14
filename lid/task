@@ -1,0 +1,7 @@
+sudo append : "Ignore lid close" \
+     /etc/systemd/logind.conf << EOF
+HandleLidSwitch=ignore
+EOF
+
+sudo : "Restart service" \
+       service systemd-logind restart
