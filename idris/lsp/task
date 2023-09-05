@@ -1,9 +1,13 @@
 depends idris/pack
 
 cmd : "Install Idris Language Server" \
-      pack install-app lsp
+      pack install-app idris2-lsp
 
-append : "Turn on rlwrap usage" \
-         ~/.pack/user/pack.toml <<EOF
-repl.rlwrap=true
-EOF
+backup ~/.pack/user/pack.toml
+
+cmd : "Add lsp to must-have apps and whitelist" \
+      sed -e \'s/^\# apps.*=.*$/apps       = [ \"idris2-lsp\" ]\\nwhitelist  = [\"idris2-lsp\",\"pack\"]/\' -i ~/.pack/user/pack.toml
+
+cmd : "Turn-on rlwrap" \
+      sed -e \'s/^repl.rlwrap = false$/repl.rlwrap = \"-pGreen -aN\"/\' -i ~/.pack/user/pack.toml
+      
