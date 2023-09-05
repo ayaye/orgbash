@@ -7,7 +7,7 @@ install libgmp3-dev
 
 
 cmd : "Install Pack - Idris package manager" \
-      bash -c '$(curl -fsSL https://raw.githubusercontent.com/stefan-hoeck/idris2-pack/main/install.bash)'
+      "$(curl -fsSL https://raw.githubusercontent.com/stefan-hoeck/idris2-pack/main/install.bash)"
 
 
 append : "Add Idris Pack binaries to PATH" \
