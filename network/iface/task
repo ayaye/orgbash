@@ -1,0 +1,20 @@
+IFACE_LIST=$(cd /sys/class/net && echo *)
+IFACE_DEFAULT=$(cd /sys/class/net && echo enp*)
+
+ask "Select iface ($IFACE_LIST): " IFACE_NAME "$IFACE_DEFAULT"
+
+IFACE_FILE="/etc/network/interfaces.d/$IFACE_NAME"
+
+sudo append : "Create config for $IFACE_NAME" \
+              $IFACE_FILE << EOF
+allow-hotplug $IFACE_NAME
+iface $IFACE_NAME inet dhcp
+EOF
+
+sudo editor "$IFACE_FILE"
+
+sudo systemctl restart networking
+
+sudo ip link set dev "$IFACE_NAME" up
+
+sudo dhclient
