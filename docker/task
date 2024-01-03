@@ -1,0 +1,11 @@
+message "Install Docker"
+message "  1. docker.io from Debian repository"
+message "  2. docker-ce from Docker's repository"
+message "Extra info: https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k"
+
+select DOCKER in "io" "ce"
+do
+  depends "docker/$DOCKER"
+  break
+done
+

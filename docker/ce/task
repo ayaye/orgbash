@@ -1,0 +1,18 @@
+depends cli/network
+
+#curl -fsSL get.docker.com | sh
+
+select ROOTLESS in yes no
+do
+    case $ROOTLESS in
+      yes )
+        install uidmap
+
+        /usr/bin/dockerd-rootless-setuptool.sh install
+	break
+	;;
+      * )
+        break
+	;;
+    esac
+done
