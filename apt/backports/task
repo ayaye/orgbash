@@ -1,0 +1,11 @@
+. /etc/os-release
+
+sudo append : "Add backports repository to" \
+              /etc/apt/sources.list << EOF
+
+deb http://deb.debian.org/debian $VERSION_CODENAME-backports main contrib non-free
+EOF
+
+sudo editor /etc/apt/sources.list
+
+update
