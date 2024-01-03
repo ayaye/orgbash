@@ -1,0 +1,9 @@
+depends influxdata/repo
+
+install telegraf
+
+#в случае установки на сервер отличный от того где находится influxdb необходимо в конфиге /etc/telegraf/telegraf.conf в секции [[outputs.influxdb]] поменять параметр urls = ["http://localhost:8086"]:
+#sed -i 's|  urls = ["http://localhost:8086"]|  urls = ["http://myserver.ru:8086"]|g' /etc/telegraf/telegraf.conf
+
+sudo systemctl start telegraf
+sudo systemctl enable telegraf

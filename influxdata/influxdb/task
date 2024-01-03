@@ -1,0 +1,6 @@
+depends influxdata/repo
+
+install influxdb2
+
+sudo systemctl start influxdb
+sudo systemctl enable influxdb
