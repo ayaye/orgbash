@@ -1,0 +1,10 @@
+install munin-node
+
+MUNIN_NODE_CONFIG_DIR="/etc/munin"
+MUNIN_NODE_CONFIG_FILE="$MUNIN_NODE_CONFIG_DIR/munin-node.conf"
+
+sudo : "Add master IP address to the config file" \
+       editor "$MUNIN_NODE_CONFIG_FILE"
+
+sudo : "(Re)start munin node service" \
+       systemctl restart munin-node

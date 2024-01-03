@@ -1,0 +1,9 @@
+depends munin/node
+
+install munin jo jq perl-doc
+
+sudo cp /etc/munin/apache24.conf /etc/apache2/conf-available/munin.conf
+
+sudo editor /etc/apache2/conf-available/munin.conf
+
+sudo systemctl reload apache2
