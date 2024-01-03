@@ -1,0 +1,8 @@
+message https://wiki.archlinux.org/title/lm_sensors
+
+install lm-sensors # i2c-tools 
+
+sudo sensors-detect --auto
+
+sensors
+
