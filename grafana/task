@@ -1,0 +1,28 @@
+depends apt/https
+depends cli/network
+
+install software-properties-common
+
+cmd : "Download Grafana repository key" \
+      wget https://apt.grafana.com/gpg.key
+
+cmd : "Dearmor Grafana repository key file" \
+      cat gpg.key | gpg --dearmor > grafana.gpg
+
+sudo : "Install Grafana repository key file" \
+       install -o root -g root -m 655 grafana.gpg /etc/apt/trusted.gpg.d
+
+rm gpg.key grafana.gpg
+
+sudo create : "Create entry for Grafana repository" \
+     /etc/apt/sources.list.d/grafana.list <<EOF
+deb [signed-by=/etc/apt/trusted.gpg.d/grafana.gpg] https://apt.grafana.com stable main
+EOF
+
+update
+
+install grafana-enterprise
+
+sudo systemctl enable grafana-server.service
+
+sudo systemctl start grafana-server
