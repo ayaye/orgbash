@@ -1,6 +1,10 @@
 depends cli/network
 
-#curl -fsSL get.docker.com | sh
+curl -fsSL get.docker.com | sh
+
+install docker-compose
+
+message "Setup rootless mode?"
 
 select ROOTLESS in yes no
 do
