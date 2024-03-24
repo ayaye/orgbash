@@ -4,7 +4,13 @@ install ssh
 
 SSHD_CONFIG=/etc/ssh/sshd_config
 
-ask "ssh server port: " SSHD_PORT 22
+if [ $# > 0 ]
+then
+    SSHD_PORT="$1"
+    shift
+else
+    ask "ssh server port: " SSHD_PORT 22
+fi
 
 sudo "sed -i -e 's/^Port.*$/# \0/g' '$SSHD_CONFIG'"
 sudo "sed -i -e 's/^Protocol.*$/# \0/g' '$SSHD_CONFIG'"
@@ -20,6 +26,10 @@ PermitRootLogin no
 PubkeyAuthentication yes
 PasswordAuthentication no
 EOF
+
+message "Enter public key"
+mkdir .ssh
+editor .ssh/authorized_keys
 
 message "Don't logout!" 
 echo
