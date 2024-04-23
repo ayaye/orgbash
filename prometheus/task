@@ -1,0 +1,10 @@
+message https://www.howtoforge.com/how-to-install-prometheus-and-node-exporter-on-debian-12/
+
+depends build-essential
+depends hardware/nvme
+depends hardware/smart
+
+install prometheus prometheus-node-exporter prometheus-node-exporter-collectors prometheus-alertmanager
+
+sudo : "Build AlertManager WebUI" \
+       /usr/share/prometheus/alertmanager/generate-ui.sh
