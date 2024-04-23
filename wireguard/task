@@ -1,0 +1,46 @@
+install wireguard
+
+ask "ip address: " IP_ADDR 192.168.1.1/32
+ask "port: " PORT 1248
+
+message "Check if wireguard is already configured:"
+if command sudo [ -f /etc/wireguard/privatekey ] || command sudo [ -f /etc/wireguard/wg0.conf ]
+then
+  bad "/etc/wireguard/privatekey or /etc/wireguard/wg0.conf exists already. Won't overwrite."
+  return
+else
+  good "Old config not found."
+fi
+
+PRIVKEY=$(wg genkey)
+PUBKEY=$(echo $PRIVKEY | wg pubkey)
+
+sudo create : "Create private key file" \
+     /etc/wireguard/privatekey <<EOF
+$PRIVKEY
+EOF
+
+sudo create : "Create public key file" \
+     /etc/wireguard/pubkey <<EOF
+$PUBKEY
+EOF
+
+sudo create : "Create config file" \
+     /etc/wireguard/wg0.conf <<EOF
+[Interface]
+Address = $IP_ADDR
+ListenPort = $PORT
+PrivateKey = $PRIVKEY
+EOF
+
+sudo : "Turn the WireGuard service at boot time" \
+       systemctl enable wg-quick@wg0
+
+sudo : "Start the service" \
+       systemctl start wg-quick@wg0
+
+sudo : "Get the service status" \
+       systemctl status wg-quick@wg0
+
+sudo : "Verify that interface named wg0 is up and running" \
+       "wg; sudo ip a show wg0"

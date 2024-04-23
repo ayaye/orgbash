@@ -1,0 +1,19 @@
+ask "Public key: " KEY ""
+ask "Endpoint (ip:port): " ENDPOINT "0.0.0.0:1248"
+ask "Allowed IPs: " ALLOWED_IP "192.168.1.1/32"
+
+sudo : "Stop service" \
+       systemctl stop wg-quick@wg0
+
+sudo append : "Add peer to config file" \
+     /etc/wireguard/wg0.conf <<EOF
+
+[Peer]
+PublicKey = $KEY
+Endpoint = $ENDPOINT
+AllowedIPs = $ALLOWED_IP
+EOF
+
+sudo : "Start the service" \
+       systemctl start wg-quick@wg0
+
