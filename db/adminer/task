@@ -1,0 +1,10 @@
+depends apache2
+depends php
+
+install adminer
+
+sudo : 'Enable adminer in apache2 config' \
+       a2enconf adminer
+
+sudo : 'Reload apache2 config' \
+       systemctl reload apache2
