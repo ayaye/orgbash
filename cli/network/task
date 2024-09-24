@@ -1,2 +1,2 @@
 # https://everything.curl.dev/
-install curl wget bind9-dnsutils
+install bind9-dnsutils curl wget net-tools
