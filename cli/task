@@ -6,4 +6,5 @@ depends cli/htop
 depends cli/man
 depends cli/network
 depends cli/rlwrap
+depends cli/rsync
 depends cli/zip
