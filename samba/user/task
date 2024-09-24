@@ -1,0 +1,3 @@
+ask 'User to set samba password for:' USERNAME ''
+
+sudo smbpasswd -a $USERNAME

@@ -1,0 +1,3 @@
+install samba smbclient
+
+sudo systemctl restart smbd.service
