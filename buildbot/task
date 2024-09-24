@@ -1,0 +1,17 @@
+depends build-essential
+depends python3
+
+install libssl-dev libffi-dev
+
+# ask dir BB, BB_MASTER
+
+cd "$BB"
+python3 -m venv "$BB"
+
+cd "$BB"
+source "bin/activate"
+pip install 'buildbot[bundle]'
+
+buildbot create-master "$BB_MASTER"
+cd "$BB_MASTER"
+cp master.cfg.sample master.cfg
