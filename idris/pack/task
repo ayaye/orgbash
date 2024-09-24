@@ -1,5 +1,6 @@
 message See https://github.com/stefan-hoeck/idris2-pack
 
+depends cli/rlwrap
 depends cli/network
 depends scheme
 
