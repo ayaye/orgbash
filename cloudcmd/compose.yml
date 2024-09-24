@@ -1,0 +1,9 @@
+version: '2'
+services:
+  cloudcmd:
+    ports:
+      - 8000:8000
+    volumes:
+      - /opt/cloudcmd:/root
+    image: coderaiser/cloudcmd
+    restart: unless-stopped
