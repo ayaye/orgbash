@@ -1,0 +1,3 @@
+ask "New PostgreSQL user name: " "PG_USER_NAME" "dbuser"
+
+sudo -u postgres -s createuser --pwprompt $PG_USER_NAME

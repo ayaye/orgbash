@@ -1,0 +1,5 @@
+ask "New PostgreSQL database name: " "PG_DB_NAME" "dbname"
+
+ask "Existing PostgreSQL user name: " "PG_USER_NAME" "dbuser"
+
+sudo -u postgres -s createdb -O "$PG_USER_NAME" "$PG_DB_NAME"
