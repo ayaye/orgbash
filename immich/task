@@ -1,0 +1,9 @@
+mk_home_dir Immich IMMICH /opt/immich
+
+wget -O "$IMMICH_HOME/docker-compose.yml" https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
+
+wget -O "$IMMICH_HOME/.env" https://github.com/immich-app/immich/releases/latest/download/example.env
+
+wget -O "$IMMICH_HOME/hwaccel.transcoding.yml" https://github.com/immich-app/immich/releases/latest/download/hwaccel.transcoding.yml
+
+wget -O "$IMMICH_HOME/hwaccel.ml.yml" https://github.com/immich-app/immich/releases/latest/download/hwaccel.ml.yml
