@@ -4,7 +4,7 @@ install ssh
 
 SSHD_CONFIG=/etc/ssh/sshd_config
 
-if [ $# > 0 ]
+if [ $# -gt 0 ]
 then
     SSHD_PORT="$1"
     shift
