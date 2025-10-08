@@ -1,0 +1,12 @@
+message "https://headscale.net/stable/setup/install/official/#using-packages-for-debianubuntu-recommended"
+
+message "See https://github.com/juanfont/headscale/releases/ for actual version number"
+
+ask HEADSCALE_VERSION "Headscale version: " "v0.26.1"
+
+wget --output-document=headscale.deb "https://github.com/juanfont/headscale/releases/download/v$HEADSCALE_VERSION/headscale_$HEADSCALE_VERSION_linux_amd64.deb" && \
+sudo apt install ./headscale.deb
+rm headscale.deb
+sudo vi /etc/headscale/config.yaml
+sudo systemctl enable --now headscale
+sudo systemctl status headscale
