@@ -1,0 +1,9 @@
+install certbot
+
+DOMAIN="$(hostname -f)"
+
+ask "Domains: " DOMAINS "$DOMAIN"
+
+ask "E-mail: "  EMAIL   "$USER@$DOMAIN"
+
+sudo certbot certonly -d "$DOMAINS" --standalone -m "$EMAIL"
