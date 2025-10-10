@@ -1,2 +1,2 @@
 # https://everything.curl.dev/
-install bind9-dnsutils curl wget net-tools
+install curl wget bind9-dnsutils traceroute net-tools
