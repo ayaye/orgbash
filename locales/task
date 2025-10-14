@@ -1,0 +1,14 @@
+message "Enable locales used in environment variables and generate them"
+
+for lc in $LANG $LC_CTYPE $LC_NUMERIC $LC_TIME $LC_COLLATE $LC_MONETARY $LC_MESSAGES $LC_PAPER $LC_NAME $LC_ADDRESS $LC_TELEPHONE $LC_MEASUREMENT $LC_IDENTIFICATION $LC_ALL
+do
+  if [[ "$lc_enabled" != *"$lc"* ]]
+  then
+    sudo : "Enabling $lc" \
+           sed -i "s/^#.\*$lc/$lc/" /etc/locale.gen
+    lc_enabled="$lc_enabled $lc"
+  fi
+done
+
+sudo : "Generate locales" \
+       locale-gen
