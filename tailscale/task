@@ -6,5 +6,19 @@ curl -fsSL https://pkgs.tailscale.com/stable/debian/trixie.tailscale-keyring.lis
 # Install Tailscale
 update
 install tailscale
+
+ask "Tailscale operator (user to use tailscale without sudo, empty to disable this feature): " TS_OPERATOR "$USER"
+
+if [ -n "$TS_OPERATOR" ]
+then
+  TS_OPERATOR="--operator $TS_OPERATOR"
+fi
+
+ask "Tailscale hostname: " TS_HOSTNAME "$HOSTNAME"
+
+ask "Tailscale (Headscale) login server: " TS_LOGIN_SERVER ""
+
+sudo tailscale login $TS_OPERATOR --hostname $TS_HOSTNAME --login-server $TS_LOGIN_SERVER
+
 # Start Tailscale!
 sudo tailscale up
