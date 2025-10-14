@@ -1,5 +1,27 @@
-depends mail/postfix
+#depends mail/postfix
 
 install dovecot-imapd
 
-message 'https://www.linuxbabe.com/mail-server/install-dovecot-imap-server-debian'
+depends certbot
+
+DOMAIN="$(hostname -f)"
+ 
+ask "Mail domain: " DOMAIN "$DOMAIN"
+
+ask "Dovecot ssl config file: " DOVECOT_CFG "/etc/dovecot/conf.d/10-ssl.conf"
+
+sudo "sed -e 's/^ssl =/# ssl =/g'                                  \
+         -e 's/^ssl_server_cert_file =/# ssl_server_cert_file =/g' \
+	 -e 's/^ssl_server_key_file =/# ssl_server_key_file =/g'   \
+	 -e 's/^ssl_cert=/# ssl_cert =/g'                          \
+	 -e 's/^ssl_key=/# ssl_key =/g'                            \
+	 -i $DOVECOT_CFG"
+
+sudo append \
+     $DOVECOT_CFG <<EOF
+ssl = required
+ssl_server_cert_file = /etc/letsencrypt/live/$DOMAIN/fullchain.pem
+ssl_server_key_file = /etc/letsencrypt/live/$DOMAIN/privkey.pem
+EOF
+
+sudo systemctl restart dovecot.service
