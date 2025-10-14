@@ -2,4 +2,29 @@ install postfix
 
 depends mail
 
+depends certbot 
+
+DOMAIN="$(hostname -f)"
+
+ask "Mail domain: " DOMAIN "$DOMAIN"
+
+POSTFIX_CFG="/etc/postfix/main.cf"
+
+sudo "sed -e 's/^smtp_tls_security_level =/# smtp_tls_security_level =/g'           \
+          -e 's/^smtp_tls_note_starttls_offer =/# smtp_tls_note_starttls_offer =/g' \
+          -e 's/^smtpd_tls_security_level =/# smtpd_tls_security_level =/g'         \
+          -e 's/^smtpd_tls_cert_file =/# smtpd_tls_cert_file =/g'                   \
+          -e 's/^smtpd_tls_key_file =/# smtpd_tls_key_file =/g'                     \
+          -i $POSTFIX_CFG"
+
+sudo append \
+     $POSTFIX_CFG <<EOF
+smtp_tls_security_level = may
+smtp_tls_note_starttls_offer = yes
+smtpd_tls_security_level = may
+smtpd_tls_cert_file = /etc/letsencrypt/live/$DOMAIN/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/$DOMAIN/privkey.pem
+EOF
+
+sudo systemctl restart postfix.service
 
