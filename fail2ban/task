@@ -1,0 +1,17 @@
+install fail2ban
+
+ask "E-mail for notifications: "  EMAIL   "$USER@$DOMAIN"
+
+sudo create : "Customize jail" \
+              /etc/fail2ban/jail.d/customisation.local <<EOF
+[DEFAULT]
+bantime  = 30d
+findtime  = 1d
+maxretry = 3
+destemail = $EMAIL
+EOF
+
+sudo : "Restart fail2ban service" \
+       systemctl restart fail2ban
+
+sudo systemctl status fail2ban
