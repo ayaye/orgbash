@@ -1,0 +1,5 @@
+ask "Public key: " PUBKEY
+mkdir ~/.ssh
+append ~/.ssh/authorized_keys <<EOF
+$PUBKEY
+EOF

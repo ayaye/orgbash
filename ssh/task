@@ -27,9 +27,7 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 EOF
 
-message "Enter public key"
-mkdir .ssh
-editor .ssh/authorized_keys
+depends addpubkey
 
 message "Don't logout!" 
 echo
