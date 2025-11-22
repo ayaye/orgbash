@@ -1,0 +1,11 @@
+install wget apt-transport-https
+
+sudo wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
+
+sudo create /etc/apt/sources.list.d/element-io.list <<EOF
+deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main
+EOF
+
+update
+
+install element-desktop
