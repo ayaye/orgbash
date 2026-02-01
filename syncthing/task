@@ -1,3 +1,5 @@
+depends cli/network
+
 # Add the release PGP keys:
 sudo mkdir -p /etc/apt/keyrings
 sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
