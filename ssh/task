@@ -27,7 +27,7 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 EOF
 
-depends addpubkey
+depends ssh/addpubkey
 
 message "Don't logout!" 
 echo
