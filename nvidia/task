@@ -1,0 +1,10 @@
+depends linux-headers
+
+install nvidia-open-kernel-dkms nvidia-driver firmware-misc-nonfree
+
+ask_restart
+
+# for new kernel
+#install linux-headers-6.12.63+deb13-amd64 
+#sudo dpkg-reconfigure nvidia-kernel-dkms
+
