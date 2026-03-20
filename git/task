@@ -11,6 +11,7 @@ git config --global credential.helper store
 git config --global pull.rebase true
 git config --global rebase.autoStash true
 git config --global alias.spull 'pull --recurse-submodules'
+git config --global init.defaultBranch main
 
 append ~/.bash_aliases << EOF
 # $TOOL $TASK start
