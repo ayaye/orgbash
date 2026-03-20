@@ -1,0 +1,14 @@
+install dkms
+
+sudo : "Generating MOK" \
+       dkms generate_mok
+
+sudo : "Importing public key" \
+       mokutil --import /var/lib/dkms/mok.pub
+
+sudo : "List keys" \
+       mokutil --list-new
+
+message "<rebooting machine then enters MOK manager EFI utility: enroll MOK, continue, confirm, enter password, reboot>"
+
+ask_restart
