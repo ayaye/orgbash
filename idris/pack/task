@@ -1,5 +1,6 @@
 message See https://github.com/stefan-hoeck/idris2-pack
 
+depends build-essential
 depends cli/rlwrap
 depends cli/network
 depends scheme
@@ -9,15 +10,6 @@ install libgmp3-dev
 
 cmd : "Install Pack - Idris package manager" \
       "$(curl -fsSL https://raw.githubusercontent.com/stefan-hoeck/idris2-pack/main/install.bash)"
-
-
-append : "Add Idris Pack binaries to PATH" \
-         ~/.bash_login << EOF
-
-# $TOOL $TASK start
-PATH="\$HOME/.pack/bin:\$PATH"
-# $TOOL $TASK end
-EOF
 
 
 append : "Init Idris Pack autocompletion" \
