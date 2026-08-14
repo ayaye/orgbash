@@ -1,0 +1,9 @@
+sudo create : "Enable ip forwarding" \
+         /etc/sysctl.d/99-tailscale.conf << EOF
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1
+EOF
+
+ask "Comma-separated list of subnets (ip/prefix): " SUBNETS ""
+
+cmd tailscale set "--advertise-routes=$SUBNETS"
